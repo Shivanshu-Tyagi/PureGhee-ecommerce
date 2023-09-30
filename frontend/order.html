@@ -113,6 +113,26 @@ height: 68vh;
          box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
      }
      
+     .poppes {
+         width: 100%;
+         height: 120vh;
+        
+         position: absolute;
+         background:hsl(116, 78%, 31%); 
+        top: 0;
+         /* transform: translate(-50%, -50%); */
+        color: white;
+         padding: 20px;
+         box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+         display: flex;
+         flex-direction: column;
+         justify-content: center;
+         align-items: center;
+
+     }
+     #success-overlay{
+display: none;
+     }
      .popup-close {
          float: right;
          cursor: pointer;
@@ -120,6 +140,13 @@ height: 68vh;
      
      .popup-content {
          padding: 10px;
+     }
+     .popups-content p{
+       font-size: 50px;
+     }
+     .popups-content h3{
+       font-size: 50px;
+       text-align: center;
      }
      
      .popup-content p {
@@ -137,7 +164,32 @@ height: 68vh;
       background-color: #970C0A;
       letter-spacing: 1px;
      }
-     
+     @media screen and (max-width:768px) {
+        form {
+
+          display: block;
+        }
+        section {
+            position: relative;
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: #fce5e2;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-around;
+            height: 200vh;
+        }
+        #product-details img {
+            width: 30%;
+            /* height: auto; */
+            /* border: 2px solid #007BFF; */
+            border-radius: 10px;
+            margin-bottom: 10px;
+            
+        }
+     }
      
     </style>
 </head>
@@ -292,6 +344,17 @@ height: 68vh;
         </form>
     </div>
   </section>
+  
+    <div id="success-overlay" class="popups">
+        <div class="poppes">
+        <div class="popups-content">
+            <p>Your order has been placed successfully!</p>
+            <h3>🎉🎉🎉🎉</h3>
+        </div>
+    </div>
+  </div>
+ 
+
 
     <script>
     document.addEventListener('DOMContentLoaded', () => {
@@ -303,41 +366,54 @@ height: 68vh;
         document.getElementById('product-image').src = productImage;
     });
 
-    const baseURL = 'http://localhost:3000/api/auth';
-    document.getElementById('order-form').addEventListener('submit', function(event) {
-        event.preventDefault();
+    const baseURL = 'https://pure-ghee-api.onrender.com/api/auth';
+    document.getElementById('order-form').addEventListener('submit', function (event) {
+    event.preventDefault();
 
-        const formData = new FormData(event.target);
-        const orderData = {
-            name: formData.get('name'),
-            mobile: formData.get('mobile'),
-            house: formData.get('house'),
-            area: formData.get('area'),
-            landmark: formData.get('landmark'),
-            pincode: formData.get('pincode'),
-            town: formData.get('town'),
-            state: formData.get('state'),
-            product: document.getElementById('product-name').textContent
-        };
+    const formData = new FormData(event.target);
+    const orderData = {
+        name: formData.get('name'),
+        mobile: formData.get('mobile'),
+        house: formData.get('house'),
+        area: formData.get('area'),
+        landmark: formData.get('landmark'),
+        pincode: formData.get('pincode'),
+        town: formData.get('town'),
+        state: formData.get('state'),
+        product: document.getElementById('product-name').textContent
+    };
 
-        // Send the order data to the server
-        fetch(`${baseURL}/order`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(orderData),
-        })
+    // Send the order data to the server
+    fetch(`${baseURL}/order`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(orderData),
+    })
         .then(response => response.json())
         .then(data => {
             console.log('Order placed successfully:', data);
             alert('Order placed successfully!');
+            showSuccessOverlay();
         })
         .catch(error => {
             console.error('Error placing order:', error);
             alert('Error placing order. Please try again.');
         });
-    });
+});
+
+function showSuccessOverlay() {
+    const successOverlay = document.getElementById('success-overlay');
+    successOverlay.style.display = 'block';
+
+    setTimeout(() => {
+        successOverlay.style.display = 'none';
+        // Redirect to the home page
+        window.location.href = './home.html';
+    }, 3000); // Show for 3 seconds (3000 milliseconds)
+}
+
     </script>
     <script>
         function togglePopup(event) {

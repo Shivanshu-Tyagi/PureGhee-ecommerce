@@ -38,7 +38,9 @@ input {
   grid-template-columns: 1fr;
   z-index: 5;
 }
-
+p{
+  font-size: 30px;
+}
 form {
   display: flex;
   align-items: center;
